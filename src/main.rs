@@ -1,4 +1,4 @@
-use expr_executor::parser::operator::{OperatorKind, Operator};
+use expr_executor::parser::expression::{OperatorKind, Expression};
 
 use std::env;
 
@@ -13,8 +13,8 @@ fn main() {
     println!("Expr: {}", expr);
 
     // (1 + 2) * (0 - 4)
-    let add_op = Operator::new(OperatorKind::Add, 1, 2);
-    let sub_op = Operator::new(OperatorKind::Sub, 0, 4);
-    let mul_op = Operator::new(OperatorKind::Mul, add_op.calc(), sub_op.calc());
+    let add_op = Expression::new(OperatorKind::Add, 1, 2);
+    let sub_op = Expression::new(OperatorKind::Sub, 0, 4);
+    let mul_op = Expression::new(OperatorKind::Mul, add_op.calc(), sub_op.calc());
     println!("(1 + 2) * (0 + 4) = {}", mul_op.calc());
 }

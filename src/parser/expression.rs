@@ -5,16 +5,16 @@ pub enum OperatorKind {
     Div
 }
 
-pub struct Operator {
+pub struct Expression {
     kind: OperatorKind,
     val_a: i32,
     val_b: i32
 }
 
-impl Operator {
+impl Expression {
 
-    pub fn new(kind: OperatorKind, val_a: i32, val_b: i32) -> Operator {
-        Operator{ kind, val_a, val_b }
+    pub fn new(kind: OperatorKind, val_a: i32, val_b: i32) -> Expression {
+        Expression{ kind, val_a, val_b }
     }
 
     pub fn calc(&self) -> i32 {
