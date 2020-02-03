@@ -1,21 +1,25 @@
-pub fn test() {
-    println!("test called!");
-}
-
-enum OperatorKind {
+pub enum OperatorKind {
     ADD,
     SUB,
     MUL,
     DIV
 }
 
-struct Operator {
+pub struct Operator {
     kind: OperatorKind,
     val_a: i32,
     val_b: i32
 }
 
-trait Calc {
-    fn calculate(&self) -> i32;
-}
+impl Operator {
 
+    pub fn calc(&self) -> i32 {
+        match &self.kind {
+            ADD => self.val_a + self.val_b,
+            SUB => self.val_a - self.val_b,
+            MUL => self.val_a * self.val_b,
+            DIV => self.val_b / self.val_b
+        }
+    }
+
+}
