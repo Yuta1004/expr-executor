@@ -1,5 +1,7 @@
 use std::fmt;
+use std::option::Option;
 
+#[derive(PartialOrd, PartialEq)]
 pub enum OperatorKind {
     Add,
     Sub,
@@ -8,36 +10,44 @@ pub enum OperatorKind {
     Num
 }
 
-pub struct Expression {
+pub struct Expression<'a> {
     kind: OperatorKind,
-    val_a: i32,
-    val_b: i32,
+    val_a: Option<&'a Expression<'a>>,
+    val_b: Option<&'a Expression<'a>>,
     num: i32
 }
 
-impl Expression {
+impl<'a> Expression<'a> {
 
-    pub fn new(kind: OperatorKind, val_a: i32, val_b: i32) -> Expression {
-        Expression{ kind, val_a, val_b, num: 0 }
+    pub fn new(kind: OperatorKind, val_a: &'a Expression<'a>, val_b: &'a Expression<'a>) -> Expression<'a> {
+        Expression{ kind, val_a: Some(val_a), val_b: Some(val_b), num: 0 }
     }
 
-    pub fn new_num(val: i32) -> Expression {
-        Expression{ kind: OperatorKind::Num, val_a: 0, val_b: 0, num: val }
+    pub fn new_num(val: i32) -> Expression<'a> {
+        Expression{ kind: OperatorKind::Num, val_a: None, val_b: None, num: val }
     }
 
     pub fn calc(&self) -> i32 {
+        // Num
+        if self.kind == OperatorKind::Num {
+            return self.num;
+        }
+
+        // Add ~ Div
+        let a = self.val_a.unwrap().calc();
+        let b = self.val_b.unwrap().calc();
         match &self.kind {
-            OperatorKind::Add => self.val_a + self.val_b,
-            OperatorKind::Sub => self.val_a - self.val_b,
-            OperatorKind::Mul => self.val_a * self.val_b,
-            OperatorKind::Div => self.val_b / self.val_b,
-            OperatorKind::Num => self.val_a
+            OperatorKind::Add => a + b,
+            OperatorKind::Sub => a - b,
+            OperatorKind::Mul => a * b,
+            OperatorKind::Div => a / b,
+            _ => 0
         }
     }
 
 }
 
-impl fmt::Display for Expression {
+impl<'a> fmt::Display for Expression<'a> {
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let str_op = match &self.kind {
@@ -47,7 +57,7 @@ impl fmt::Display for Expression {
             OperatorKind::Div => "/",
             OperatorKind::Num => ""
         };
-        write!(f, "{} {} {}", str_op, self.val_a, self.val_b)
+        write!(f, "{}", str_op)
     }
 
 }

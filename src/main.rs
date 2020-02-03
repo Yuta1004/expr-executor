@@ -13,11 +13,12 @@ fn main() {
     println!("Expr: {}", expr);
 
     // (1 + 2) * (0 - 4)
-    let add_op = Expression::new(OperatorKind::Add, 1, 2);
-    let sub_op = Expression::new(OperatorKind::Sub, 0, 4);
-    let mul_op = Expression::new(OperatorKind::Mul, add_op.calc(), sub_op.calc());
-    println!("a: {}", add_op);
-    println!("b: {}", sub_op);
-    println!("c: {}", mul_op);
-    println!("Result: {}", mul_op.calc());
+    let num_0 = Expression::new_num(0);
+    let num_1 = Expression::new_num(1);
+    let num_2 = Expression::new_num(2);
+    let num_4 = Expression::new_num(4);
+    let expr_add = Expression::new(OperatorKind::Add, &num_1, &num_2);
+    let expr_sub = Expression::new(OperatorKind::Sub, &num_0, &num_4);
+    let expr_mul = Expression::new(OperatorKind::Mul, &expr_add, &expr_sub);
+    println!("(1 + 2) * (0 - 4) = {}", expr_mul.calc());
 }
