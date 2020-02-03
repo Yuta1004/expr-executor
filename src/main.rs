@@ -1,3 +1,5 @@
+use expr_executor::parser;
+
 use std::env;
 
 fn main() {
@@ -9,4 +11,6 @@ fn main() {
         _ => panic!("Error!! Argument size must be 2!")
     }
     println!("Received Expr: {}", expr);
+
+    parser::operator::test();
 }
