@@ -4,7 +4,8 @@ pub enum OperatorKind {
     Add,
     Sub,
     Mul,
-    Div
+    Div,
+    Num
 }
 
 pub struct Expression {
@@ -19,12 +20,17 @@ impl Expression {
         Expression{ kind, val_a, val_b }
     }
 
+    pub fn new_num(val: i32) -> Expression {
+        Expression{ kind: OperatorKind::Num, val_a: val, val_b: 0}
+    }
+
     pub fn calc(&self) -> i32 {
         match &self.kind {
             OperatorKind::Add => self.val_a + self.val_b,
             OperatorKind::Sub => self.val_a - self.val_b,
             OperatorKind::Mul => self.val_a * self.val_b,
-            OperatorKind::Div => self.val_b / self.val_b
+            OperatorKind::Div => self.val_b / self.val_b,
+            OperatorKind::Num => self.val_a
         }
     }
 
@@ -37,7 +43,8 @@ impl fmt::Display for Expression {
             OperatorKind::Add => "+",
             OperatorKind::Sub => "-",
             OperatorKind::Mul => "*",
-            OperatorKind::Div => "/"
+            OperatorKind::Div => "/",
+            OperatorKind::Num => ""
         };
         write!(f, "{} {} {}", str_op, self.val_a, self.val_b)
     }
