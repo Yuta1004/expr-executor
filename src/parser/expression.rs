@@ -1,3 +1,5 @@
+use std::fmt;
+
 pub enum OperatorKind {
     Add,
     Sub,
@@ -24,6 +26,20 @@ impl Expression {
             OperatorKind::Mul => self.val_a * self.val_b,
             OperatorKind::Div => self.val_b / self.val_b
         }
+    }
+
+}
+
+impl fmt::Display for Expression {
+
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let str_op = match &self.kind {
+            OperatorKind::Add => "+",
+            OperatorKind::Sub => "-",
+            OperatorKind::Mul => "*",
+            OperatorKind::Div => "/"
+        };
+        write!(f, "{} {} {}", str_op, self.val_a, self.val_b)
     }
 
 }

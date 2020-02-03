@@ -16,5 +16,8 @@ fn main() {
     let add_op = Expression::new(OperatorKind::Add, 1, 2);
     let sub_op = Expression::new(OperatorKind::Sub, 0, 4);
     let mul_op = Expression::new(OperatorKind::Mul, add_op.calc(), sub_op.calc());
-    println!("(1 + 2) * (0 + 4) = {}", mul_op.calc());
+    println!("a: {}", add_op);
+    println!("b: {}", sub_op);
+    println!("c: {}", mul_op);
+    println!("Result: {}", mul_op.calc());
 }
