@@ -1,4 +1,4 @@
-use expr_executor::parser;
+use expr_executor::parser::operator::{OperatorKind, Operator};
 
 use std::env;
 
@@ -12,5 +12,6 @@ fn main() {
     }
     println!("Received Expr: {}", expr);
 
-    parser::operator::test();
+    let add_op = Operator::new(OperatorKind::Add, 1, 2);
+    println!("{}", add_op.calc());
 }
