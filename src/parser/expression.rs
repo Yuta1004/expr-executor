@@ -1,4 +1,3 @@
-use std::fmt;
 use std::option::Option;
 
 #[derive(PartialOrd, PartialEq)]
@@ -43,21 +42,6 @@ impl<'a> Expression<'a> {
             OperatorKind::Div => a / b,
             _ => 0
         }
-    }
-
-}
-
-impl<'a> fmt::Display for Expression<'a> {
-
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let str_op = match &self.kind {
-            OperatorKind::Add => "+",
-            OperatorKind::Sub => "-",
-            OperatorKind::Mul => "*",
-            OperatorKind::Div => "/",
-            OperatorKind::Num => ""
-        };
-        write!(f, "{}", str_op)
     }
 
 }
