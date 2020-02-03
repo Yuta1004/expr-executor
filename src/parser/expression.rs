@@ -11,17 +11,18 @@ pub enum OperatorKind {
 pub struct Expression {
     kind: OperatorKind,
     val_a: i32,
-    val_b: i32
+    val_b: i32,
+    num: i32
 }
 
 impl Expression {
 
     pub fn new(kind: OperatorKind, val_a: i32, val_b: i32) -> Expression {
-        Expression{ kind, val_a, val_b }
+        Expression{ kind, val_a, val_b, num: 0 }
     }
 
     pub fn new_num(val: i32) -> Expression {
-        Expression{ kind: OperatorKind::Num, val_a: val, val_b: 0}
+        Expression{ kind: OperatorKind::Num, val_a: 0, val_b: 0, num: val }
     }
 
     pub fn calc(&self) -> i32 {
