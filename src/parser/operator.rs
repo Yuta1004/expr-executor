@@ -1,8 +1,8 @@
 pub enum OperatorKind {
-    ADD,
-    SUB,
-    MUL,
-    DIV
+    Add,
+    Sub,
+    Mul,
+    Div
 }
 
 pub struct Operator {
@@ -15,10 +15,10 @@ impl Operator {
 
     pub fn calc(&self) -> i32 {
         match &self.kind {
-            ADD => self.val_a + self.val_b,
-            SUB => self.val_a - self.val_b,
-            MUL => self.val_a * self.val_b,
-            DIV => self.val_b / self.val_b
+            OperatorKind::Add => self.val_a + self.val_b,
+            OperatorKind::Sub => self.val_a - self.val_b,
+            OperatorKind::Mul => self.val_a * self.val_b,
+            OperatorKind::Div => self.val_b / self.val_b
         }
     }
 
