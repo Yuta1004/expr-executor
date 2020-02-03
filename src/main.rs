@@ -10,8 +10,11 @@ fn main() {
         2 => expr = &args[1],
         _ => panic!("Argument size must be 2")
     }
-    println!("Received Expr: {}", expr);
+    println!("Expr: {}", expr);
 
+    // (1 + 2) * (0 - 4)
     let add_op = Operator::new(OperatorKind::Add, 1, 2);
-    println!("{}", add_op.calc());
+    let sub_op = Operator::new(OperatorKind::Sub, 0, 4);
+    let mul_op = Operator::new(OperatorKind::Mul, add_op.calc(), sub_op.calc());
+    println!("(1 + 2) * (0 + 4) = {}", mul_op.calc());
 }
