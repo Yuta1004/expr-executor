@@ -1,4 +1,4 @@
-use super::expression::Expression;
+use super::expression::{Expression, OperatorKind};
 
 /// 式をパースしてExpressionで表現した形にする
 ///
@@ -14,8 +14,28 @@ use super::expression::Expression;
 /// parse("1").calc(); // -> 1
 /// ```
 pub fn parse(expr: &str) -> Expression {
-    let (_, out) = op_num(expr);
+    let (_, out) = op_add_sub(expr);
     out
+}
+
+/// 足し算/引き算をパースする
+/// parseによって呼ばれる
+///
+/// # Params
+/// - expr (&str) : 式
+///
+/// # Return
+/// - &str : 評価に使用した部分を除いた後の式
+/// - Expression : Expressionで表現された式
+fn op_add_sub(expr: &str) -> (&str, Expression) {
+    let (expr, left) = op_num(skip_space(expr));
+    let (expr, op) = match skip_space(expr).chars().nth(0) {
+        Some('+') => (&skip_space(expr)[1..], OperatorKind::Add),
+        Some('-') => (&skip_space(expr)[1..], OperatorKind::Sub),
+        _ => { return (expr, left); }
+    };
+    let (expr, right) = op_add_sub(skip_space(expr));
+    (expr, Expression::new(op, left, right))
 }
 
 /// 数字をパースする
@@ -77,6 +97,9 @@ fn test_parse() {
     assert_eq!(parse("1").calc(), 1);
     assert_eq!(parse("134").calc(), 134);
     assert_eq!(parse("-1204").calc(), -1204);
+    assert_eq!(parse("10+20").calc(), 30);
+    assert_eq!(parse("30 -40").calc(), -10);
+    assert_eq!(parse("1+2+ 3+4 + 5").calc(), 15);
 }
 
 #[test]
