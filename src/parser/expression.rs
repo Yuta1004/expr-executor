@@ -45,3 +45,18 @@ impl<'a> Expression<'a> {
     }
 
 }
+
+#[test]
+fn test_expression() {
+    // (1+2) * (0-4) / 6
+    let num_0 = Expression::new_num(0);
+    let num_1 = Expression::new_num(1);
+    let num_2 = Expression::new_num(2);
+    let num_4 = Expression::new_num(4);
+    let num_6 = Expression::new_num(6);
+    let expr_add = Expression::new(OperatorKind::Add, &num_1, &num_2);
+    let expr_sub = Expression::new(OperatorKind::Sub, &num_0, &num_4);
+    let expr_mul = Expression::new(OperatorKind::Mul, &expr_add, &expr_sub);
+    let expr_div = Expression::new(OperatorKind::Div, &expr_mul, &num_6);
+    assert_eq!(expr_div.calc(), -2);
+}
