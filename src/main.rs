@@ -1,3 +1,5 @@
+use expr_executor::parser::parse::parse;
+
 use std::env;
 
 fn main() {
@@ -9,4 +11,7 @@ fn main() {
         _ => panic!("Argument size must be 2")
     }
     println!("Expr: {}", expr);
+
+    // 計算
+    println!("Answer: {}", parse(expr).calc());
 }

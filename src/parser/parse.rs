@@ -1,3 +1,10 @@
+use super::expression::Expression;
+
+pub fn parse(expr: &str) -> Expression {
+    Expression::new_num(0)
+}
+
+
 fn skip_space(target: &str) -> &str {
     for (idx, c) in target.chars().enumerate() {
         match c {
