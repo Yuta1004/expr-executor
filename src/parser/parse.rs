@@ -86,8 +86,11 @@ fn skip_space(target: &str) -> &str {
 /// - &str : ↑を除いたtargetの文字列スライス
 fn find_num(target: &str) -> (&str, &str) {
     for (idx, c) in target.chars().enumerate() {
+        if idx == 0 && c == '-' {
+            continue;
+        }
         match c {
-            '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' => {},
+            '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => {},
             _ => return (&target[..idx], &target[idx..])
         }
     };
