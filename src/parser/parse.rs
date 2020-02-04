@@ -1,7 +1,17 @@
 use super::expression::Expression;
 
-pub fn parse(_expr: &str) -> Expression {
-    Expression::new_num(0)
+pub fn parse(expr: &str) -> Expression {
+    let (_, out) = op_num(expr);
+    out
+}
+
+fn op_num(expr: &str) -> (&str, Expression){
+    let (num_s, expr) = find_num(skip_space(expr));
+    if num_s == "" {
+        panic!("\nCannot convert to num : {}
+                        ^ here", expr);
+    };
+    (expr, Expression::new_num(num_s.parse::<i32>().unwrap()))
 }
 
 fn skip_space(target: &str) -> &str {
@@ -22,6 +32,12 @@ fn find_num(target: &str) -> (&str, &str) {
         }
     };
     (target, "")
+}
+
+#[test]
+fn test_parse() {
+    assert_eq!(parse("1").calc(), 1);
+    assert_eq!(parse("134").calc(), 134);
 }
 
 #[test]
