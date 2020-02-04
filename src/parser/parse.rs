@@ -28,13 +28,14 @@ pub fn parse(expr: &str) -> Expression {
 /// - &str : 評価に使用した部分を除いた後の式
 /// - Expression : Expressionで表現された式
 fn op_add_sub(expr: &str) -> (&str, Expression) {
-    let (expr, left) = op_num(skip_space(expr));
-    let (expr, op) = match skip_space(expr).chars().nth(0) {
-        Some('+') => (&skip_space(expr)[1..], OperatorKind::Add),
-        Some('-') => (&skip_space(expr)[1..], OperatorKind::Sub),
+    let (expr, left) = op_num(expr);
+    let expr = skip_space(expr);
+    let (expr, op) = match expr.chars().nth(0) {
+        Some('+') => (&expr[1..], OperatorKind::Add),
+        Some('-') => (&expr[1..], OperatorKind::Sub),
         _ => { return (expr, left); }
     };
-    let (expr, right) = op_add_sub(skip_space(expr));
+    let (expr, right) = op_add_sub(expr);
     (expr, Expression::new(op, left, right))
 }
 
@@ -48,6 +49,7 @@ fn op_add_sub(expr: &str) -> (&str, Expression) {
 /// - &str : 評価に使用した部分を除いた後の式
 /// - Expression : Expressionで表現された式
 fn op_num(expr: &str) -> (&str, Expression){
+    let expr = skip_space(expr);
     let (num_s, expr) = find_num(skip_space(expr));
     if num_s == "" {
         panic!("\nCannot convert to num : {}
