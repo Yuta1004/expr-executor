@@ -28,15 +28,19 @@ pub fn parse(expr: &str) -> Expression {
 /// - &str : 評価に使用した部分を除いた後の式
 /// - Expression : Expressionで表現された式
 fn op_add_sub(expr: &str) -> (&str, Expression) {
-    let (expr, left) = op_num(expr);
-    let expr = skip_space(expr);
-    let (expr, op) = match expr.chars().nth(0) {
-        Some('+') => (&expr[1..], OperatorKind::Add),
-        Some('-') => (&expr[1..], OperatorKind::Sub),
-        _ => { return (expr, left); }
-    };
-    let (expr, right) = op_add_sub(expr);
-    (expr, Expression::new(op, left, right))
+    let (mut expr, mut node) = op_num(expr);
+    loop {
+        expr = skip_space(expr);
+        let op = match expr.chars().nth(0) {
+            Some('+') => OperatorKind::Add,
+            Some('-') => OperatorKind::Sub,
+            _ => break
+        };
+        let (tmp_expr, right) = op_num(&expr[1..]);
+        expr = tmp_expr;
+        node = Expression::new(op, node, right);
+    }
+    (expr, node)
 }
 
 /// 数字をパースする
@@ -105,6 +109,8 @@ fn test_parse() {
     assert_eq!(parse("10+20").calc(), 30);
     assert_eq!(parse("30 -40").calc(), -10);
     assert_eq!(parse("1+2+ 3+4 + 5").calc(), 15);
+    assert_eq!(parse("1-2 + 3-4 + 5-6").calc(), -3);
+    assert_eq!(parse("-1 + 2-3+4 - 5 +6").calc(), 3);
 }
 
 #[test]
