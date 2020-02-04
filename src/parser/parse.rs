@@ -1,19 +1,48 @@
 use super::expression::Expression;
 
+/// 式をパースしてExpressionで表現した形にする
+///
+/// # Params
+/// - expr (&str) : 式
+///
+/// # Return
+/// - Expression : Expressionで表現された式
+///
+/// # Examples
+/// ```
+/// parse("1").calc() // -> 1
+/// ```
 pub fn parse(expr: &str) -> Expression {
     let (_, out) = op_num(expr);
     out
 }
 
+/// 数字をパースする
+/// parseによって呼ばれる
+///
+/// # Params
+/// - expr (&str) : 式
+///
+/// # Return
+/// - &str : 評価に使用した部分を除いた後の式
+/// - Expression : Expressionで表現された式
 fn op_num(expr: &str) -> (&str, Expression){
     let (num_s, expr) = find_num(skip_space(expr));
     if num_s == "" {
         panic!("\nCannot convert to num : {}
                         ^ here", expr);
     };
-    (expr, Expression::new_num(num_s.parse::<i32>().unwrap()))
+    let num = num_s.parse::<i32>().unwrap();
+    (expr, Expression::new_num(num))
 }
 
+/// 文頭の空白文字を読み飛ばす
+///
+/// # Params
+/// - target (&str) : 対象文字列
+///
+/// # Return
+/// - &str : targetの文字列スライス
 fn skip_space(target: &str) -> &str {
     for (idx, c) in target.chars().enumerate() {
         match c {
@@ -24,6 +53,14 @@ fn skip_space(target: &str) -> &str {
     ""
 }
 
+/// 文頭にある数字を検出し、返す
+///
+/// # Params
+/// - target (&str) : 対象文字列
+///
+/// # Return
+/// - &str : parse::<i32>().unwrap()が可能な文字スライス
+/// - &str : ↑を除いたtargetの文字列スライス
 fn find_num(target: &str) -> (&str, &str) {
     for (idx, c) in target.chars().enumerate() {
         match c {
