@@ -10,7 +10,8 @@ use super::expression::Expression;
 ///
 /// # Examples
 /// ```
-/// parse("1").calc() // -> 1
+/// use expr_executor::parser::parse::parse;
+/// parse("1").calc(); // -> 1
 /// ```
 pub fn parse(expr: &str) -> Expression {
     let (_, out) = op_num(expr);
