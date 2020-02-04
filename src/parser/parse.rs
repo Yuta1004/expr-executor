@@ -64,7 +64,7 @@ fn skip_space(target: &str) -> &str {
 fn find_num(target: &str) -> (&str, &str) {
     for (idx, c) in target.chars().enumerate() {
         match c {
-            '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => {},
+            '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' => {},
             _ => return (&target[..idx], &target[idx..])
         }
     };
@@ -75,6 +75,7 @@ fn find_num(target: &str) -> (&str, &str) {
 fn test_parse() {
     assert_eq!(parse("1").calc(), 1);
     assert_eq!(parse("134").calc(), 134);
+    assert_eq!(parse("-1204").calc(), -1204);
 }
 
 #[test]
