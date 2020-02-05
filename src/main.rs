@@ -8,7 +8,7 @@ fn main() {
     let args = env::args().collect::<Vec<_>>();
     match args.len() {
         2 => expr = &args[1],
-        _ => panic!("Argument size must be 2")
+        _ => panic!("Usage: cargo run <EXPR>")
     }
     println!("Expr: {}", expr);
 
