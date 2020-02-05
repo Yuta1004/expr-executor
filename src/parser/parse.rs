@@ -101,7 +101,7 @@ fn op_num(expr: &str) -> (&str, Expression){
     let expr = skip_space(expr);
     let (num_s, expr) = find_num(skip_space(expr));
     if num_s == "" {
-        error_at("Cannot convert to num", expr);
+        error_at("Expected number", expr);
     };
     let num = num_s.parse::<i32>().unwrap();
     (expr, Expression::new_num(num))
