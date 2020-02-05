@@ -28,12 +28,37 @@ pub fn parse(expr: &str) -> Expression {
 /// - &str : 評価に使用した部分を除いた後の式
 /// - Expression : Expressionで表現された式
 fn op_add_sub(expr: &str) -> (&str, Expression) {
-    let (mut expr, mut node) = op_num(expr);
+    let (mut expr, mut node) = op_mul_div(expr);
     loop {
         expr = skip_space(expr);
         let op = match expr.chars().nth(0) {
             Some('+') => OperatorKind::Add,
             Some('-') => OperatorKind::Sub,
+            _ => break
+        };
+        let (tmp_expr, right) = op_mul_div(&expr[1..]);
+        expr = tmp_expr;
+        node = Expression::new(op, node, right);
+    }
+    (expr, node)
+}
+
+/// 掛け算/割り算をパースする
+/// parseによって呼ばれる
+///
+/// # Params
+/// - expr (&str) : 式
+///
+/// # Return
+/// - &str : 評価に使用した部分を除いた後の式
+/// - Expression : Expressionで表現された式
+fn op_mul_div(expr: &str) -> (&str, Expression) {
+    let (mut expr, mut node) = op_num(expr);
+    loop {
+        expr = skip_space(expr);
+        let op = match expr.chars().nth(0) {
+            Some('*') => OperatorKind::Mul,
+            Some('/') => OperatorKind::Div,
             _ => break
         };
         let (tmp_expr, right) = op_num(&expr[1..]);
@@ -111,6 +136,10 @@ fn test_parse() {
     assert_eq!(parse("1+2+ 3+4 + 5").calc(), 15);
     assert_eq!(parse("1-2 + 3-4 + 5-6").calc(), -3);
     assert_eq!(parse("-1 + 2-3+4 - 5 +6").calc(), 3);
+    assert_eq!(parse("1 + 2 * 3 + 4").calc(), 11);
+    assert_eq!(parse("1*2*3*4*5").calc(), 120);
+    assert_eq!(parse("800/40+30").calc(), 50);
+    assert_eq!(parse("1-10*90").calc(), -899);
 }
 
 #[test]
