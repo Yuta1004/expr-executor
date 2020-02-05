@@ -19,7 +19,6 @@ pub fn parse(expr: &str) -> Expression {
 }
 
 /// 足し算/引き算をパースする
-/// parseによって呼ばれる
 ///
 /// # Params
 /// - expr (&str) : 式
@@ -44,7 +43,6 @@ fn op_add_sub(expr: &str) -> (&str, Expression) {
 }
 
 /// 掛け算/割り算をパースする
-/// parseによって呼ばれる
 ///
 /// # Params
 /// - expr (&str) : 式
@@ -53,7 +51,7 @@ fn op_add_sub(expr: &str) -> (&str, Expression) {
 /// - &str : 評価に使用した部分を除いた後の式
 /// - Expression : Expressionで表現された式
 fn op_mul_div(expr: &str) -> (&str, Expression) {
-    let (mut expr, mut node) = op_num(expr);
+    let (mut expr, mut node) = op_brackets(expr);
     loop {
         expr = skip_space(expr);
         let op = match expr.chars().nth(0) {
@@ -61,15 +59,37 @@ fn op_mul_div(expr: &str) -> (&str, Expression) {
             Some('/') => OperatorKind::Div,
             _ => break
         };
-        let (tmp_expr, right) = op_num(&expr[1..]);
+        let (tmp_expr, right) = op_brackets(&expr[1..]);
         expr = tmp_expr;
         node = Expression::new(op, node, right);
     }
     (expr, node)
 }
 
+/// () をパースする
+///
+/// # Params
+/// - expr (&str) : 式
+///
+/// # Return
+/// - &str : 評価に使用した部分を除いた後の式
+/// - Expression : Expressionで表現された式
+fn op_brackets(expr: &str) -> (&str, Expression){
+    let expr = skip_space(expr);
+    match expr.chars().nth(0) {
+        Some('(')  => {
+            let (mut expr, node) = op_add_sub(&expr[1..]);
+            expr = skip_space(expr);
+            match expr.chars().nth(0) {
+                Some(')') => (&expr[1..], node),
+                _ => error_at("Expected \'(\' ", expr)
+            }
+        }
+        _ => op_num(expr)
+    }
+}
+
 /// 数字をパースする
-/// parseによって呼ばれる
 ///
 /// # Params
 /// - expr (&str) : 式
@@ -130,7 +150,7 @@ fn find_num(target: &str) -> (&str, &str) {
 /// # Params
 /// - msg (&str) : メッセージ
 /// - detail (&str) : 詳細
-fn error_at(msg: &str, detail: &str) {
+fn error_at(msg: &str, detail: &str) -> ! {
     let mut space = String::new();
     for _ in 0..msg.len()+3 {
         space.push_str(" ");
@@ -153,6 +173,9 @@ fn test_parse() {
     assert_eq!(parse("1*2*3*4*5").calc(), 120);
     assert_eq!(parse("800/40+30").calc(), 50);
     assert_eq!(parse("1-10*90").calc(), -899);
+    assert_eq!(parse("(1+2) * (0-4)").calc(), -12);
+    assert_eq!(parse("2 * (1+2+3+4+5)").calc(), 30);
+    assert_eq!(parse("10*(1+10)/2").calc(), 55);
 }
 
 #[test]
