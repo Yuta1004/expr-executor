@@ -81,8 +81,7 @@ fn op_num(expr: &str) -> (&str, Expression){
     let expr = skip_space(expr);
     let (num_s, expr) = find_num(skip_space(expr));
     if num_s == "" {
-        panic!("\nCannot convert to num : {}
-                        ^ here", expr);
+        error_at("Cannot convert to num", expr);
     };
     let num = num_s.parse::<i32>().unwrap();
     (expr, Expression::new_num(num))
@@ -124,6 +123,20 @@ fn find_num(target: &str) -> (&str, &str) {
         }
     };
     (target, "")
+}
+
+/// 場所注釈付きでエラーを出力する
+///
+/// # Params
+/// - msg (&str) : メッセージ
+/// - detail (&str) : 詳細
+fn error_at(msg: &str, detail: &str) {
+    let mut space = String::new();
+    for _ in 0..msg.len()+3 {
+        space.push_str(" ");
+    }
+    let space = &space;
+    panic!("\n{} : {}\n{}^ here\n", msg, detail, space);
 }
 
 #[test]
