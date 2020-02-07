@@ -1,9 +1,21 @@
 use expr_executor::parser::parse::parse;
 
-use std::env;
-use std::io;
+use std::io::{self, Write};
 
 fn main() {
+    let mut cnt = 0;
+    loop {
+        // prompt
+        print!("inp[{}] > ", cnt);
+        io::stdout().flush().unwrap();
+        cnt += 1;
+
+        // command
+        match &read_line()[..] {
+            "exit" => break,
+            _ => continue
+        }
+    }
 }
 
 /// 標準入力から1行読み込んで返す
