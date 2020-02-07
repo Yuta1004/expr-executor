@@ -4,17 +4,6 @@ use std::env;
 use std::io;
 
 fn main() {
-    // 引数
-    let expr: &str;
-    let args = env::args().collect::<Vec<_>>();
-    match args.len() {
-        2 => expr = &args[1],
-        _ => panic!("Usage: cargo run <EXPR>")
-    }
-    println!("Expr: {}", expr);
-
-    // 計算
-    println!("Answer: {}", parse(expr).calc());
 }
 
 /// 標準入力から1行読み込んで返す
