@@ -6,7 +6,7 @@ fn main() {
     let mut cnt = 0;
     loop {
         // prompt
-        print!("inp[{}] > ", cnt);
+        print!("in [{}] > ", cnt);
         io::stdout().flush().unwrap();
 
         // command
