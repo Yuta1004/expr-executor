@@ -8,13 +8,15 @@ fn main() {
         // prompt
         print!("inp[{}] > ", cnt);
         io::stdout().flush().unwrap();
-        cnt += 1;
 
         // command
         match &read_line()[..] {
             "exit" => break,
-            _ => continue
+            expr @ _ => {
+                println!("out[{}] > {}", cnt, parse(expr).calc());
+            }
         }
+        cnt += 1;
     }
 }
 
