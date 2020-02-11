@@ -15,6 +15,10 @@ fn main() {
         // command
         match &read_line()[..] {
             "exit" => break,
+            "" => {
+                cnt += 1;
+                continue;
+            },
             expr @ _ => {
                 let ans = parse(expr).calc();
                 history.push(ans);
