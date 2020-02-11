@@ -1,9 +1,12 @@
 use expr_executor::parser::parse::parse;
 
 use std::io::{self, Write};
+use std::vec::Vec;
 
 fn main() {
     let mut cnt = 0;
+    let mut history: Vec<i32> = Vec::new();
+
     loop {
         // prompt
         print!("in [{}] > ", cnt);
@@ -13,7 +16,9 @@ fn main() {
         match &read_line()[..] {
             "exit" => break,
             expr @ _ => {
-                println!("out[{}] > {}", cnt, parse(expr).calc());
+                let ans = parse(expr).calc();
+                history.push(ans);
+                println!("out[{}] > {}", cnt, ans);
             }
         }
         cnt += 1;
