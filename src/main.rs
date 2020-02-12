@@ -13,20 +13,18 @@ fn main() {
         io::stdout().flush().unwrap();
 
         // command
+        let mut ans = 0;
         match &read_line()[..] {
+            "" => {},
             "exit" => break,
-            "" => {
-                cnt += 1;
-                continue;
-            },
             expr @ _ => {
                 let expr = pre_process(expr, &history);
-                let ans = parse(&expr).calc();
-                history.push(ans);
+                ans = parse(&expr).calc();
                 println!("out[{}] > {}", cnt, ans);
             }
         }
         cnt += 1;
+        history.push(ans);
     }
 }
 
